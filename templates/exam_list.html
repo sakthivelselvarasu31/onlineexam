@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Available Exams - Online Exam Platform</title>
+    <meta name="description" content="Browse and select from available online exams. AI-proctored assessments with real-time monitoring." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      /* ── Reset ── */
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: #f0f4f9;
+        color: #1e293b;
+        min-height: 100vh;
+      }
+
+      /* ── Top Navigation Bar ── */
+      .top-bar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(15, 23, 42, 0.96);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 0 32px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .top-bar-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+      }
+
+      .brand-name {
+        font-family: 'Outfit', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.5px;
+      }
+
+      .brand-name span {
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .top-bar-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-link {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 8px 16px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .nav-link:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .nav-link.active {
+        color: #ffffff;
+        background: rgba(59, 130, 246, 0.2);
+      }
+
+      .nav-link-icon {
+        font-size: 16px;
+      }
+
+      /* ── Page Content ── */
+      .page-content {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 24px 60px;
+      }
+
+      /* ── Page Header Section ── */
+      .page-header {
+        margin-bottom: 36px;
+      }
+
+      .page-header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+
+      .page-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 32px;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .title-emoji {
+        font-size: 30px;
+      }
+
+      .exam-count-pill {
+        background: linear-gradient(135deg, #eff6ff, #e0e7ff);
+        color: #3b82f6;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 1px solid #bfdbfe;
+      }
+
+      .page-subtitle {
+        font-size: 15px;
+        color: #64748b;
+        line-height: 1.5;
+        max-width: 520px;
+      }
+
+      /* ── Search Bar ── */
+      .search-bar {
+        position: relative;
+        max-width: 380px;
+      }
+
+      .search-bar input {
+        width: 100%;
+        padding: 12px 16px 12px 44px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        background: #ffffff;
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        color: #1e293b;
+        outline: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }
+
+      .search-bar input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+      }
+
+      .search-bar input::placeholder {
+        color: #94a3b8;
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #94a3b8;
+        pointer-events: none;
+      }
+
+      /* ── Exam Cards Grid ── */
+      .exam-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 24px;
+      }
+
+      .exam-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+        transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .exam-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        border-radius: 20px 20px 0 0;
+        transition: height 0.3s ease;
+      }
+
+      .exam-card:nth-child(3n+1)::before {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+      }
+      .exam-card:nth-child(3n+2)::before {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      }
+      .exam-card:nth-child(3n)::before {
+        background: linear-gradient(135deg, #06b6d4, #0891b2);
+      }
+
+      .exam-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        border-color: transparent;
+      }
+
+      .exam-card:hover::before {
+        height: 6px;
+      }
+
+      /* Card Icon */
+      .card-icon-wrap {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        margin-bottom: 20px;
+        flex-shrink: 0;
+      }
+
+      .exam-card:nth-child(3n+1) .card-icon-wrap {
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      }
+      .exam-card:nth-child(3n+2) .card-icon-wrap {
+        background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+      }
+      .exam-card:nth-child(3n) .card-icon-wrap {
+        background: linear-gradient(135deg, #ecfeff, #cffafe);
+      }
+
+      .card-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 8px;
+        letter-spacing: -0.3px;
+      }
+
+      .card-description {
+        font-size: 14px;
+        color: #64748b;
+        line-height: 1.55;
+        margin-bottom: 24px;
+        flex-grow: 1;
+      }
+
+      /* Card Footer */
+      .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 16px;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      .card-meta {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: #94a3b8;
+        font-weight: 500;
+      }
+
+      .meta-icon {
+        font-size: 14px;
+      }
+
+      .start-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #3b82f6;
+        text-decoration: none;
+        padding: 8px 18px;
+        border-radius: 10px;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        transition: all 0.2s ease;
+      }
+
+      .start-link:hover {
+        background: #3b82f6;
+        color: #ffffff;
+        border-color: #3b82f6;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      .start-link svg {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.2s ease;
+      }
+
+      .start-link:hover svg {
+        transform: translateX(3px);
+      }
+
+      /* ── Empty State ── */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #94a3b8;
+      }
+
+      .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+
+      .empty-state h3 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 20px;
+        color: #475569;
+        margin-bottom: 8px;
+      }
+
+      /* ── Back to Dashboard ── */
+      .back-section {
+        margin-top: 40px;
+        text-align: center;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 22px;
+        border-radius: 10px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }
+
+      .back-link:hover {
+        color: #1e293b;
+        border-color: #cbd5e1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      }
+
+      /* ── Animations ── */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .exam-card {
+        animation: fadeInUp 0.5s ease forwards;
+        opacity: 0;
+      }
+
+      .exam-card:nth-child(1) { animation-delay: 0.05s; }
+      .exam-card:nth-child(2) { animation-delay: 0.12s; }
+      .exam-card:nth-child(3) { animation-delay: 0.19s; }
+      .exam-card:nth-child(4) { animation-delay: 0.26s; }
+      .exam-card:nth-child(5) { animation-delay: 0.33s; }
+      .exam-card:nth-child(6) { animation-delay: 0.40s; }
+
+      /* ── Responsive ── */
+      @media (max-width: 768px) {
+        .top-bar {
+          padding: 0 16px;
+          height: 56px;
+        }
+
+        .brand-name {
+          font-size: 18px;
+        }
+
+        .top-bar-nav .nav-link span {
+          display: none;
+        }
+
+        .page-content {
+          padding: 24px 16px 48px;
+        }
+
+        .page-title {
+          font-size: 24px;
+        }
+
+        .exam-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+
+        .page-header-top {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .search-bar {
+          max-width: 100%;
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .top-bar-nav {
+          gap: 2px;
+        }
+
+        .nav-link {
+          padding: 8px 10px;
+          font-size: 13px;
+        }
+
+        .card-footer {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+
+        .start-link {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ═══ Top Navigation Bar ═══ -->
+    <nav class="top-bar" id="top-bar">
+      <div class="top-bar-brand">
+        <div class="brand-icon">📝</div>
+        <div class="brand-name">Online <span>Exam</span></div>
+      </div>
+      <div class="top-bar-nav">
+        <a href="{{ url_for('dashboard') }}" class="nav-link" id="nav-dashboard">
+          <span class="nav-link-icon">🏠</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="{{ url_for('exam.exam_list') }}" class="nav-link active" id="nav-exams">
+          <span class="nav-link-icon">📝</span>
+          <span>Exams</span>
+        </a>
+        <a href="{{ url_for('logout') }}" class="nav-link" id="nav-logout">
+          <span class="nav-link-icon">🚪</span>
+          <span>Logout</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- ═══ Page Content ═══ -->
+    <div class="page-content">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-top">
+          <div>
+            <h1 class="page-title">
+              <span class="title-emoji">🎓</span>
+              Available Exams
+              <span class="exam-count-pill" id="exam-count-pill">{{ courses|length }} Exams</span>
+            </h1>
+            <p class="page-subtitle">Select an exam to begin your AI-proctored assessment. Ensure your webcam and microphone are ready before starting.</p>
+          </div>
+          <div class="search-bar" id="search-bar-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="exam-search" placeholder="Search exams..." autocomplete="off" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Cards Grid -->
+      {% if courses %}
+      <div class="exam-grid" id="exam-grid">
+        {% for course in courses %}
+        <div class="exam-card" id="exam-card-{{ course.id }}" data-title="{{ course.title|lower }}" data-desc="{{ course.description|lower }}">
+          <div class="card-icon-wrap">
+            {% if loop.index % 3 == 1 %}📐
+            {% elif loop.index % 3 == 2 %}📖
+            {% else %}💻
+            {% endif %}
+          </div>
+          <h2 class="card-title">{{ course.title }}</h2>
+          <p class="card-description">{{ course.description }}</p>
+          <div class="card-footer">
+            <div class="card-meta">
+              <span class="meta-item">
+                <span class="meta-icon">⏱️</span>
+                5 min
+              </span>
+              <span class="meta-item">
+                <span class="meta-icon">🛡️</span>
+                AI Proctored
+              </span>
+            </div>
+            <a href="{{ url_for('exam.exam_start', course_id=course.id) }}" class="start-link" id="start-{{ course.id }}">
+              Start
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state" id="empty-state">
+        <div class="empty-state-icon">📭</div>
+        <h3>No Exams Available</h3>
+        <p>Check back later for upcoming assessments.</p>
+      </div>
+      {% endif %}
+
+      <!-- Back to Dashboard -->
+      <div class="back-section">
+        <a href="{{ url_for('dashboard') }}" class="back-link" id="back-dashboard">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- ═══ Search Filter Script ═══ -->
+    <script>
+      document.getElementById('exam-search').addEventListener('input', function () {
+        const query = this.value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.exam-card');
+        let visibleCount = 0;
+
+        cards.forEach(function (card) {
+          const title = card.getAttribute('data-title') || '';
+          const desc = card.getAttribute('data-desc') || '';
+          const matches = title.includes(query) || desc.includes(query);
+          card.style.display = matches ? '' : 'none';
+          if (matches) visibleCount++;
+        });
+
+        document.getElementById('exam-count-pill').textContent = visibleCount + ' Exam' + (visibleCount !== 1 ? 's' : '');
+      });
+    </script>
+
+  </body>
+</html>

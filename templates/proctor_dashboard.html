@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proctor Dashboard - Integrity Center</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Online Exam</h2>
+    <ul>
+      <li><a href="{{ url_for('dashboard') }}">🏠 Dashboard</a></li>
+      <li><a href="{{ url_for('exam.exam_list') }}">📝 Start Exam</a></li>
+      <li><a href="{{ url_for('proctor.proctor_dashboard') }}" class="active">🛡️ Proctor Dashboard</a></li>
+      <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <h1>Proctoring & Integrity Dashboard</h1>
+      <p>Real-time Proctoring Analytics, Face Monitoring Audit & Suspicious Event Monitoring</p>
+      <div style="margin-top: 20px;">
+        <a href="{{ url_for('proctor.proctor_analytics') }}" class="btn-primary" style="background: linear-gradient(135deg, #4F46E5, #3B82F6); padding: 10px 20px; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);">
+          📊 View Data Science Analytics (Milestone 3)
+        </a>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Total Sessions</h3>
+        <p>{{ total_sessions }}</p>
+      </div>
+      <div class="card">
+        <h3>Flagged Sessions</h3>
+        <p class="text-danger">{{ flagged_count }}</p>
+      </div>
+      <div class="card">
+        <h3>Clean Sessions</h3>
+        <p class="text-success">{{ clean_count }}</p>
+      </div>
+    </div>
+
+    <div class="panel card-full-width">
+      <h2>All Exam Sessions & Integrity Status</h2>
+      {% if sessions %}
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Session ID</th>
+              <th>Student</th>
+              <th>Email</th>
+              <th>Course</th>
+              <th>Start Time</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in sessions %}
+              <tr>
+                <td>#{{ s.id }}</td>
+                <td>{{ s.student_name }}</td>
+                <td>{{ s.email }}</td>
+                <td><strong>{{ s.course_id }}</strong></td>
+                <td>{{ s.start_time.strftime('%Y-%m-%d %H:%M:%S') if s.start_time else 'N/A' }}</td>
+                <td>
+                  <span class="status-badge status-{{ s.status }}">
+                    {{ s.status.upper() }}
+                  </span>
+                </td>
+                <td>
+                  <a href="{{ url_for('exam.exam_report', session_id=s.id) }}" class="btn-sm">View Report</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="text-muted">No exam sessions recorded yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

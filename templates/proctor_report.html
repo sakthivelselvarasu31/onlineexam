@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam Results - Session #{{ exam_session.id }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #f0f4f9 0%, #e2e8f0 100%);
+      color: #1e293b;
+      min-height: 100vh;
+      padding: 32px 16px;
+    }
+
+    .results-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Top Header */
+    .results-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .results-header h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .results-header .course-name {
+      font-size: 16px;
+      color: #64748b;
+    }
+
+    .results-header .student-meta {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    /* Score Hero Card */
+    .score-hero {
+      background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+      border-radius: 20px;
+      padding: 36px 32px;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 28px;
+      box-shadow: 0 16px 40px -10px rgba(37, 99, 235, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .score-hero::before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+      top: -100px;
+      right: -80px;
+    }
+
+    .score-hero .score-label {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+
+    .score-hero .score-big {
+      font-family: 'Outfit', sans-serif;
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .score-hero .score-detail {
+      font-size: 16px;
+      opacity: 0.85;
+      margin-top: 8px;
+    }
+
+    .score-hero .score-status {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .score-status.pass { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .score-status.fail { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    /* Proctoring Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #64748b;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    /* Section Panel */
+    .section-panel {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    .section-panel h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Question Review Cards */
+    .question-review {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .review-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 18px;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .review-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+
+    .review-card.correct {
+      border-left: 4px solid #22c55e;
+      background: #f0fdf4;
+    }
+
+    .review-card.wrong {
+      border-left: 4px solid #ef4444;
+      background: #fef2f2;
+    }
+
+    .review-card.unanswered {
+      border-left: 4px solid #94a3b8;
+      background: #f8fafc;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .review-q-number {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #2563eb;
+      background: #eff6ff;
+      padding: 4px 12px;
+      border-radius: 8px;
+    }
+
+    .review-result-badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .review-result-badge.correct { background: #dcfce7; color: #166534; }
+    .review-result-badge.wrong { background: #fee2e2; color: #991b1b; }
+    .review-result-badge.unanswered { background: #f1f5f9; color: #64748b; }
+
+    .review-question-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .review-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px;
+    }
+
+    .review-option {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .review-option.chosen {
+      border-color: #2563eb;
+      background: #eff6ff;
+      font-weight: 600;
+      color: #1e40af;
+    }
+
+    .review-option.correct-answer {
+      border-color: #22c55e;
+      background: #f0fdf4;
+      color: #166534;
+      font-weight: 600;
+    }
+
+    .review-option.chosen.correct-answer {
+      border-color: #22c55e;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .review-option.chosen:not(.correct-answer) {
+      border-color: #ef4444;
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
+    .option-marker {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      flex-shrink: 0;
+    }
+
+    .review-option.chosen .option-marker {
+      border-color: #2563eb;
+      background: #2563eb;
+      box-shadow: inset 0 0 0 3px #ffffff;
+    }
+
+    .review-option.correct-answer .option-marker {
+      border-color: #22c55e;
+      background: #22c55e;
+      box-shadow: inset 0 0 0 3px #ffffff;
+    }
+
+    /* Flags */
+    .flags-list {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .flag-pill {
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 13px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .no-flags {
+      color: #166534;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    /* Actions */
+    .actions-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .score-hero .score-big { font-size: 48px; }
+      .review-options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="results-container">
+    <!-- Header -->
+    <div class="results-header">
+      <h1>📋 Exam Results</h1>
+      <div class="course-name">{{ course.title }}</div>
+      <div class="student-meta">
+        {{ exam_session.student_name }} &bull; {{ exam_session.email }} &bull; Session #{{ exam_session.id }}
+      </div>
+    </div>
+
+    <!-- Score Hero Card -->
+    <div class="score-hero">
+      <div class="score-label">Your Score</div>
+      <div class="score-big">{{ exam_session.score if exam_session.score is not none else 0 }}%</div>
+      <div class="score-detail">{{ correct_count }} out of {{ total_questions }} questions correct</div>
+      {% if exam_session.score is not none and exam_session.score >= 50 %}
+        <span class="score-status pass">✓ Passed</span>
+      {% else %}
+        <span class="score-status fail">✗ Not Passed</span>
+      {% endif %}
+    </div>
+
+    <!-- Proctoring Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value">{{ exam_session.score if exam_session.score is not none else 0 }}%</div>
+        <div class="stat-label">Exam Marks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👤</div>
+        <div class="stat-value">{{ face_absent_count }}</div>
+        <div class="stat-label">Face Absent Count</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">{{ multi_face_count }}</div>
+        <div class="stat-label">Multi-Face Count</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔄</div>
+        <div class="stat-value">{{ tab_switch_count }}</div>
+        <div class="stat-label">Tab Switches</div>
+      </div>
+    </div>
+
+    <!-- Suspicion Summary -->
+    {% if report %}
+    <div class="section-panel">
+      <h2>🛡️ Proctoring Summary</h2>
+      <div class="stats-grid" style="margin-bottom: 0;">
+        <div class="stat-card">
+          <div class="stat-value" style="font-size: 24px;">{{ report.suspicion_score }} / 100</div>
+          <div class="stat-label">Suspicion Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="font-size: 24px;">
+            <span style="
+              padding: 4px 14px;
+              border-radius: 20px;
+              font-size: 14px;
+              {% if report.suspicion_level == 'LOW' %}
+                background: #dcfce7; color: #166534;
+              {% elif report.suspicion_level == 'MEDIUM' %}
+                background: #fef3c7; color: #92400e;
+              {% elif report.suspicion_level == 'HIGH' %}
+                background: #fee2e2; color: #991b1b;
+              {% else %}
+                background: #fce8e6; color: #c5221f;
+              {% endif %}
+            ">{{ report.suspicion_level }}</span>
+          </div>
+          <div class="stat-label">Suspicion Level</div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Triggered Flags -->
+    <div class="section-panel">
+      <h2>⚠️ Triggered Flags</h2>
+      {% if report and report.flags_triggered %}
+        <div class="flags-list">
+          {% for flag in report.flags_triggered %}
+            <div class="flag-pill">⚠️ {{ flag }}</div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="no-flags">✅ No suspicious activity flags triggered. Clean exam attempt!</p>
+      {% endif %}
+    </div>
+
+    <!-- AI Integrity Report Agent -->
+    {% if report %}
+    <div class="section-panel" id="ai-report-panel">
+      <h2>🤖 AI Integrity Report</h2>
+      <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">
+        Use LangChain AI to analyze the session events and generate a comprehensive integrity assessment.
+      </p>
+      <button id="btn-generate-ai" class="btn-primary" onclick="generateAiReport({{ exam_session.id }})" style="background: linear-gradient(135deg, #10b981, #059669);">
+        ✨ Generate AI Report
+      </button>
+      <div id="ai-report-content" style="margin-top: 16px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; display: none; line-height: 1.6;">
+        <!-- AI output will appear here -->
+      </div>
+      <div id="ai-loading" style="display: none; margin-top: 16px; color: #64748b;">
+        ⏳ Analyzing session with LangChain... Please wait.
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Question-by-Question Review -->
+    {% if question_review %}
+    <div class="section-panel">
+      <h2>📝 Question Review</h2>
+      <div class="question-review">
+        {% for q in question_review %}
+          <div class="review-card {{ 'correct' if q.is_correct else ('unanswered' if not q.chosen else 'wrong') }}">
+            <div class="review-header">
+              <span class="review-q-number">Q{{ q.number }}</span>
+              {% if q.is_correct %}
+                <span class="review-result-badge correct">✓ Correct</span>
+              {% elif not q.chosen %}
+                <span class="review-result-badge unanswered">— Not Answered</span>
+              {% else %}
+                <span class="review-result-badge wrong">✗ Wrong</span>
+              {% endif %}
+            </div>
+            <div class="review-question-text">{{ q.question }}</div>
+            <div class="review-options">
+              {% for option in q.options %}
+                <div class="review-option {{ 'chosen' if option == q.chosen else '' }} {{ 'correct-answer' if option == q.correct_answer else '' }}">
+                  <span class="option-marker"></span>
+                  {{ option }}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Actions -->
+    <div class="actions-row">
+      <a href="{{ url_for('dashboard') }}" class="btn-primary">🏠 Return to Dashboard</a>
+      <a href="{{ url_for('proctor.proctor_dashboard') }}" class="btn-secondary">🛡️ Proctor Overview</a>
+      <a href="{{ url_for('proctor.proctor_analytics') }}" class="btn-primary" style="background: linear-gradient(135deg, #8B5CF6, #6D28D9);">📊 View Data Science Analytics (Milestone 3)</a>
+    </div>
+  </div>
+
+  <script>
+    function generateAiReport(sessionId) {
+      const btn = document.getElementById('btn-generate-ai');
+      const content = document.getElementById('ai-report-content');
+      const loading = document.getElementById('ai-loading');
+      
+      btn.style.display = 'none';
+      loading.style.display = 'block';
+      content.style.display = 'none';
+
+      fetch(`/api/proctor/report/${sessionId}/ai`)
+        .then(response => response.json())
+        .then(data => {
+          loading.style.display = 'none';
+          content.style.display = 'block';
+          if (data.error) {
+            content.innerHTML = `<span style="color: #ef4444;">Error: ${data.error}</span>`;
+            btn.style.display = 'inline-block';
+          } else {
+            // Replace newlines with <br> for HTML rendering
+            const htmlContent = data.ai_report.replace(/\n/g, '<br>');
+            content.innerHTML = `<strong>AI Assessment:</strong><br><br>${htmlContent}`;
+          }
+        })
+        .catch(err => {
+          loading.style.display = 'none';
+          content.style.display = 'block';
+          content.innerHTML = `<span style="color: #ef4444;">Request failed: ${err}</span>`;
+          btn.style.display = 'inline-block';
+        });
+    }
+  </script>
+</body>
+</html>

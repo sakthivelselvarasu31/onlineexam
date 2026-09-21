@@ -1,0 +1,545 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ================================
+   GENERAL PREMIUM TOKENS
+================================ */
+
+:root {
+    --bg-main: #0f172a;
+    --bg-panel: rgba(30, 41, 59, 0.7);
+    --bg-card: rgba(255, 255, 255, 0.05);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    --border-light: rgba(255, 255, 255, 0.1);
+    --shadow-soft: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+    --glow: 0 0 15px rgba(99, 102, 241, 0.5);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.15), transparent 25%);
+    background-attachment: fixed;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Optional body overrides for specific pages that don't need flex centering */
+.exam-page-body {
+    display: block;
+    height: auto;
+    padding: 24px 16px;
+    align-items: stretch;
+}
+
+.container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* ================================
+   LOGIN / REGISTER BOX (Glassmorphism)
+================================ */
+
+.login-box{
+    width: 440px;
+    background: var(--bg-panel);
+    backdrop-filter: blur(20px);
+    padding: 45px 40px;
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    animation: fadeInUp 0.6s ease;
+}
+
+.login-box h2{
+    margin-bottom:25px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    color: var(--text-main);
+}
+
+.login-box label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    margin-top: 15px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.login-box input{
+    width:100%;
+    padding:14px;
+    margin:8px 0;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border-light);
+    border-radius:10px;
+    color: var(--text-main);
+    font-size:15px;
+    transition:0.3s;
+}
+
+.login-box input:focus{
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.login-box button{
+    width:100%;
+    padding:14px;
+    border:none;
+    background: var(--accent-gradient);
+    color:white;
+    border-radius:10px;
+    font-size:16px;
+    font-weight: 600;
+    cursor:pointer;
+    margin-top:20px;
+    transition:.3s;
+}
+
+.login-box button:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--glow);
+}
+
+.login-box p{
+    margin-top:20px;
+    font-size:14px;
+    color: var(--text-muted);
+}
+
+.login-box a{
+    color: #a855f7;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.login-box a:hover{
+    text-decoration:underline;
+}
+
+.alert{
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    padding:12px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius:8px;
+    margin-bottom:15px;
+    font-size: 14px;
+}
+
+/* ---------- Camera Box (Register/Capture) ---------- */
+.camera-box {
+    margin: 15px 0;
+    padding: 15px;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    background: rgba(0,0,0,0.2);
+}
+
+.camera-box video {
+    width: 100%;
+    max-height: 220px;
+    border-radius: 8px;
+    background: #000;
+    object-fit: cover;
+}
+
+.camera-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.camera-actions button {
+    flex: 1;
+    margin-top: 0;
+    padding: 10px;
+    font-size: 14px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--border-light);
+}
+.camera-actions button:hover {
+    background: rgba(255,255,255,0.2);
+    box-shadow: none;
+    transform: none;
+}
+
+#cameraStatus {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #34d399;
+}
+
+/* ================================
+   EXAM CAPTURE & TAKE (Dark Premium)
+================================ */
+
+.exam-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--bg-panel);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-soft);
+    padding: 30px;
+    animation: fadeInUp 0.5s ease;
+}
+
+.exam-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.exam-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+.exam-sub {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.exam-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+}
+
+.panel {
+    background: rgba(0,0,0,0.15);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+}
+
+.video-wrap video {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+}
+
+.controls button {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.controls button:hover {
+    background: var(--accent-hover);
+}
+
+.start-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent-gradient);
+    color: #fff;
+    font-weight: 700;
+    margin-top: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+.start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glow);
+}
+.start-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Question Items */
+.question-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.q-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 15px;
+}
+
+.option-chip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.2);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.option-chip:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.4);
+}
+
+.option-chip input {
+    accent-color: var(--accent);
+    width: 16px;
+    height: 16px;
+}
+
+.btn-submit-exam {
+    background: var(--accent-gradient);
+    color: #ffffff;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+.btn-submit-exam:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glow);
+}
+
+/* Timer and Status Headers for Exam Take */
+.timer-card {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 10px 20px;
+    text-align: center;
+}
+.timer-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.timer-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #34d399;
+}
+.header-right-meta {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* ================================
+   QUESTION NAV & QUESTION CARDS
+================================ */
+.question-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.question-nav-arrow {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.question-nav-arrow:hover {
+    background: var(--accent);
+}
+
+.question-nav-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    border: 1px solid var(--border-light);
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.question-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.question-nav-btn.active {
+    background: var(--accent-gradient);
+    color: white;
+    border: none;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.question-card {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: none; /* JS will show active */
+}
+.question-card.active {
+    display: block;
+    animation: fadeInUp 0.4s ease;
+}
+
+.question-header {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.q-number {
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.q-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.custom-option {
+    position: relative;
+    cursor: pointer;
+    display: block;
+}
+
+.custom-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.option-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+}
+
+.option-bullet {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.custom-option:hover .option-box {
+    border-color: rgba(168, 85, 247, 0.4);
+    background: rgba(168, 85, 247, 0.05);
+    color: var(--text-main);
+}
+
+.custom-option input[type="radio"]:checked + .option-box {
+    border-color: var(--accent);
+    background: rgba(99, 102, 241, 0.1);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+}
+
+.custom-option input[type="radio"]:checked + .option-box .option-bullet {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: inset 0 0 0 4px #1e293b;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media(max-width:900px){
+    .exam-grid{grid-template-columns:1fr;}
+    .login-box { width: 90%; }
+}

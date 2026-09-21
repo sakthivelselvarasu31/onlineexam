@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="login-box">
+
+        <h2>Create Student Account</h2>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                required
+            >
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                required
+            >
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+            >
+
+            <div class="camera-box">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas" hidden></canvas>
+                <input type="hidden" id="photo_data" name="photo_data">
+                <div class="camera-actions">
+                    <button type="button" id="startCameraBtn">Open Camera</button>
+                    <button type="button" id="captureBtn">Capture Photo</button>
+                </div>
+                <p id="cameraStatus">Open the camera and capture your photo.</p>
+            </div>
+
+            <button type="submit">
+                Register
+            </button>
+
+        </form>
+
+        <script>
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const photoDataInput = document.getElementById('photo_data');
+            const statusEl = document.getElementById('cameraStatus');
+            const startCameraBtn = document.getElementById('startCameraBtn');
+            const captureBtn = document.getElementById('captureBtn');
+            let stream = null;
+
+            startCameraBtn.addEventListener('click', async () => {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                    video.srcObject = stream;
+                    await video.play();
+                    statusEl.textContent = 'Camera is ready. Capture your photo.';
+                } catch (error) {
+                    statusEl.textContent = 'Camera access was denied or unavailable.';
+                    console.error(error);
+                }
+            });
+
+            captureBtn.addEventListener('click', () => {
+                if (!stream) {
+                    statusEl.textContent = 'Open the camera first.';
+                    return;
+                }
+
+                const context = canvas.getContext('2d');
+                canvas.width = video.videoWidth || 640;
+                canvas.height = video.videoHeight || 480;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                photoDataInput.value = canvas.toDataURL('image/jpeg', 0.9);
+                statusEl.textContent = 'Photo captured and ready to save.';
+            });
+
+            document.querySelector('form').addEventListener('submit', function (event) {
+                if (!photoDataInput.value) {
+                    event.preventDefault();
+                    statusEl.textContent = 'Please capture a photo before registering.';
+                }
+            });
+        </script>
+
+        <p>
+            Already have an account?
+            <a href="{{ url_for('auth.login') }}">
+                Login
+            </a>
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

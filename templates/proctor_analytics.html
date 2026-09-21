@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proctor Analytics - Data Science Module</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .analytics-container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .chart-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(10px);
+        }
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+        }
+        .chart-card h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            color: #E2E8F0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+        }
+        .chart-img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+        .empty-state {
+            text-align: center;
+            color: #94A3B8;
+            padding: 2rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+        .btn-primary {
+            background: #4F46E5;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover {
+            background: #4338CA;
+        }
+    </style>
+</head>
+<body>
+    <div class="analytics-container">
+        <div class="header">
+            <div>
+                <h1 style="margin: 0; color: white;">Proctor Analytics Hub</h1>
+                <p style="color: #94A3B8; margin-top: 0.5rem;">Data Science & Cohort Profiling</p>
+            </div>
+            <a href="{{ url_for('proctor.proctor_dashboard') }}" class="btn-primary">&larr; Back to Dashboard</a>
+        </div>
+
+        <div class="chart-grid">
+            <!-- Session Clustering -->
+            <div class="chart-card">
+                <h3>K-Means Session Clustering (Cohort Risk Profiling)</h3>
+                {% if clusters_url %}
+                    <img src="{{ url_for('static', filename=clusters_url) }}" alt="Session Clustering" class="chart-img">
+                {% else %}
+                    <div class="empty-state">Not enough data for clustering (requires at least 3 sessions).</div>
+                {% endif %}
+            </div>
+
+            <!-- Score Distribution -->
+            <div class="chart-card">
+                <h3>Integrity Score Distribution</h3>
+                {% if score_dist_url %}
+                    <img src="{{ url_for('static', filename=score_dist_url) }}" alt="Score Distribution" class="chart-img">
+                {% else %}
+                    <div class="empty-state">No score data available.</div>
+                {% endif %}
+            </div>
+
+            <!-- Event Heatmap -->
+            <div class="chart-card full-width">
+                <h3>Event Frequency Heatmap</h3>
+                {% if event_heatmap_url %}
+                    <img src="{{ url_for('static', filename=event_heatmap_url) }}" alt="Event Heatmap" class="chart-img" style="max-height: 500px; object-fit: contain;">
+                {% else %}
+                    <div class="empty-state">No event data available.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+
+<body>
+    <div class="sidebar">
+        <h2>Online Exam</h2>
+        <ul>
+            <li><a href="{{ url_for('dashboard') }}">🏠 Dashboard</a></li>
+            <li><a href="{{ url_for('exam.exam_list') }}">📝 Start Exam</a></li>
+            <li><a href="{{ url_for('exam.results') }}">📊 Results</a></li>
+            <li><a href="#">👤 Profile</a></li>
+            <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main">
+        <div class="header">
+            <h1>Welcome, {{ name }} 👋</h1>
+            <p>Online Exam Monitoring & Integrity Analytics Platform</p>
+        </div>
+
+        <div class="profile-card">
+            <div class="profile-info">
+                <h2>{{ name }}</h2>
+                <p><strong>Email:</strong> {{ email }}</p>
+                <p><strong>Status:</strong> <span class="status-active">Active</span></p>
+            </div>
+
+            <div class="profile-photo">
+                {% if photo_url %}
+                    <img src="{{ photo_url }}" alt="Student Photo">
+                {% else %}
+                    <div class="profile-placeholder">👤</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Upcoming Exams</h3>
+                <p>2</p>
+            </div>
+            <div class="card">
+                <h3>Completed Exams</h3>
+                <p>5</p>
+            </div>
+            <div class="card">
+                <h3>Integrity Score</h3>
+                <p>100%</p>
+            </div>
+        </div>
+
+        <div class="exam-box">
+            <h2>Ready to Start Your Exam?</h2>
+            <p>Please ensure that:</p>
+            <ul>
+                <li>✔ Webcam is ON</li>
+                <li>✔ Face is clearly visible</li>
+                <li>✔ Good internet connection</li>
+                <li>✔ No mobile phone nearby</li>
+                <li>✔ Stay in full-screen mode</li>
+            </ul>
+            <br>
+            <a href="{{ url_for('exam.exam_list') }}">
+                <button>Start Exam</button>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
